@@ -49,21 +49,17 @@
                     <h2>This is me</h2>
                     <img class="image" src="images/me.jpg" alt="me">
                     <p>
-                        <strong>PS:</strong> I don't look like this!
+                        I am <a href="#">sankha93</a> on <a href="https://twitter.com/sankha93">Twitter</a>, <a href="https://github.com/sankha93">Github</a>, <a href="irc://irc.mozilla.org">IRC</a>.
                     </p>
                 </section>
 
-                <!-- Example of nested vertical slides -->
                 <section>
                     <h2>JavaScript?</h2>
                     <p>
-                        Still not the cool enough for many!
-                        <ul>
-                            <li class="fragment">Callback hell</li>
-                            <li class="fragment">Iterations</li>
-                            <li class="fragment">Inline Functions</li>
-                            <li class="fragment">Blah blah...</li>
-                        </ul>
+                        Language is evolving. Fast!<br><br>
+                        <span class="fragment">Iterations, </span>
+                        <span class="fragment">Inline Functions, </span>
+                        <span class="fragment">Blah blah...</span>
                     </p>
                 </section>
 
@@ -156,10 +152,9 @@ true
                         <p>
                             The dual of the rest parameters.
                             <pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
-var a = [3, 4, 5];
-var b = [1, 2, ...a];
-
-/* b is [1, 2, 3, 4, 5] */
+> var a = [3, 4, 5];
+> [1, 2, ...a];
+[1, 2, 3, 4, 5]
                             </code></pre>
                         </p>
                     </section>
@@ -187,11 +182,13 @@ function g(a) {
                         <p>
                             The name says it. Its a set of arbitrary values.
                             <pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
-var s = new Set([1, true, "three"]);
-
-s.has(true);   /* true */
-s.has("true"); /* false */
-s.size()       /* 3 */
+> var s = new Set([1, true, "three"]);
+> s.has(true);
+true
+> s.has("true");
+false
+> s.size();
+3
                             </code></pre>
                         </p>
                     </section>
@@ -200,18 +197,299 @@ s.size()       /* 3 */
                         <p>
                             Additional and deletion of elements is also easy.
                             <pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
-s.delete("three");   /* true */
-s.has("three");      /* false */
-s.add("two");
-s.size()             /* 3 */
+> s.delete("three");
+true
+> s.has("three");
+false
+> s.add("two");
+> s.size()
+3
                             </code></pre>
                         </p>
                     </section>
                 </section>
 
                 <section>
-                    <h1>THE END</h1>
-                    <h3>BY Hakim El Hattab / hakim.se</h3>
+                    <section>
+                        <h2>Maps</h2>
+                        <p>
+                            Key/Value pairs the JS way. Your keys aren't converted to strings implicitly.
+                            <pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+var data = {val: "age"};
+var m = new Map([[name, "sankha"], [data, 20]]);
+
+> m.get(name);
+"sankha"
+> m.get(data);
+20
+                            </code></pre>
+                        </p>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>WeakMap</h2>
+                        <p>
+                            Cycles between keys and values can tie up space in a Map.<br>
+                            Weakmap comes to rescue!
+                            <pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+> var objkey1 = {toString: function(){return "objkey1"}};
+> var objkey2 = {toString: function(){return "objkey2"}};
+> var wm = new WeakMap();
+> wm.set(objkey1, objkey2);
+> wm.set(objkey2, objkey1);
+> wm.get(objkey1);
+({toString:(function (){return "objkey2"})})
+                            </code></pre>
+                        </p>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Iterators</h2>
+                        <p>
+                            <code>for-of</code> loops.
+                            <pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+> for (var v of [1, 2, 3]) {
+  console.log(v);
+}
+1
+2
+3
+                            </code></pre>
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Iterators</h2>
+                        <p>
+                            Iterables from Sets and Maps.
+                            <pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+> for (var e of set) {
+  console.log(e);
+}
+
+> for (var [k, v] of map) {
+  console.log(k, v);
+}
+                            </code></pre>
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Iterators</h2>
+                        <p>
+                            Iterate over keys, values and items.
+                            <pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+> var s = new Set([1, 2, 3]);
+> var it = set.keys();
+> it = set.values();
+> it = set.entries();
+> it.next();
+[1, 1]
+> it.next();
+[2, 2]
+                            </code></pre>
+                            Applicable for any Iterables, Array, Sets, Maps.
+                        </p>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Generators</h2>
+                        <p>
+                            Better way to create iterators. Each call to <code>next()</code> executes the function body till the next <code>yield</code>.
+                            <pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+function myGenerator() {
+  for (var i = 0; i < 3; i++)
+    yield i * 2;
+}
+
+var g = myGenerator();
+g.next(); // returns 0
+g.next(); // returns 2
+g.next(); // returns 4
+g.next(); // throws StopIteration
+                            </code></pre>
+                        </p>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Proxy</h2>
+                        <p>
+                            To enable ES programmers to represent virtualized objects (proxies).
+                            <pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+> var MethodSink = Proxy({}, {
+  has: function(target, name) { return true; },
+  get: function(target, name, receiver) {
+    if (name in Object.prototype) {
+      return Object.prototype[name];
+    }
+    return function(...args) {
+      return receiver.__noSuchMethod__(name, args);
+    }
+  }
+});
+                            </code></pre>
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Proxy</h2>
+                        <p>
+                            Lets create a default <code>__noSuchMethod__</code>.
+                            <pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+> Object.defineProperty(
+  Object.prototype,
+  '__noSuchMethod__',
+  {
+    configurable: true,
+    writable: true,
+    value: function(name, args) {
+      throw new TypeError(name + " is not a function");
+    }
+  }
+);
+                            </code></pre>
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Proxy</h2>
+                        <p>
+                            Lets add MethodSink to the end of the prototype chain.
+                            <pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+> var obj = {
+      foo: 1 ,
+      __proto__: MethodSink,
+      __noSuchMethod__: function(name, args) {
+        return name;
+      }
+    }
+> obj.foo
+1
+> obj.bar()
+"bar"
+> obj.toString
+function toString() {
+    [native code]
+}
+                            </code></pre>
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Proxy</h2>
+                        <p>
+                            We can now proxy <code>__noSuchMethod__</code>.
+                            <pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+> obj.bar
+(function (...args) {
+      return receiver.__noSuchMethod__(name, args);
+    })
+> var foo = obj.bar
+js> foo()
+"bar"
+                            </code></pre>
+                        </p>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Arrow Functions</h2>
+                        <p>
+                            Shorter function expressions.
+                            <pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+> var square = x => x * x;
+> square(5)
+25
+                            </code></pre>
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Arrow Functions</h2>
+                        <p>
+                            Take a look at this peice of code.
+                            <pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+function Person(){
+  this.age = 0;
+
+  setInterval(function growUp(){
+    this.age++;
+  }, 1000);
+}
+
+var p = new Person();
+                            </code></pre>
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Arrow Functions</h2>
+                        <p>
+                            Arrow functions lexically bind the <code>this</code> value.
+                            <pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+function Person(){
+  this.age = 0;
+
+  setInterval(() => {
+    this.age++;
+  }, 1000);
+}
+
+var p = new Person();
+                            </code></pre>
+                        </p>
+                    </section>
+                </section>
+                <section>
+                    <h2>Modules</h2>
+                    <p>
+                        They are eh, modules?
+                        <pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+module FastMath {
+    export function sin() { /*...*/ }
+    export function cos() { /*...*/ }
+}
+
+import {sin, cos} from FastMath;
+                            </code></pre>
+                    </p>
+                </section>
+                <section>
+                    <h2>In-built methods</h2>
+                    <p>
+                        <ul>
+                            <li class="fragment">String startsWith, endsWith, contains, repeat</li>
+                            <li class="fragment">Number isNaN, isFinite, toInteger, isInteger</li>
+                            <li class="fragment">Number of Math functions</li>
+                        </ul>
+                    </p>
+                </section>
+                <section>
+                    <h2>Lots More</h2>
+                    <p>
+                        There are many more things being planned.<br><br>
+                        <span class="fragment">Classes, </span>
+                        <span class="fragment">Modules, </span>
+                        <span class="fragment">etc.</span>
+                    </p>
+                </section>
+                <section>
+                    <h2>Read the spec</h2>
+                    <p>
+                        The spec is publicly available online at <a href="http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts">ECMAScript Wiki</a>.
+                    </p>
+                </section>
+                <section>
+                    <h2>Experiment</h2>
+                    <p>
+                        Partially implemented in SpiderMonkey and V8.<br>
+                        Try on Firefox Nightly and Google Chrome and report bugs.
+                    </p>
+                    <p>
+                        <br><br>
+                        <small><strong>Note:</strong> Turn on Experimental JavaScript in Google Chrome via <code>chrome://flags</code></small>
+                    </p>
+                </section>
+                <section>
+                    <h1>Thank you!</h1>
+                    <h3>Questions?</h3>
                 </section>
 
             </div>
